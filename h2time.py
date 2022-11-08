@@ -264,13 +264,11 @@ class H2Time:
         ctx.options |= (
                 ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 | ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1
         )
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
         ctx.options |= ssl.OP_NO_COMPRESSION
         ctx.set_ciphers("ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20")
         ctx.set_alpn_protocols(["h2", "http/1.1"])
-        try:
-            ctx.set_npn_protocols(["h2", "http/1.1"])
-        except NotImplementedError:
-            pass
         return ctx
 
     async def run_attack(self):
